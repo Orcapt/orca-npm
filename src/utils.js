@@ -2,12 +2,12 @@
  * Utilities
  * ========
  * 
- * Common utility functions for Lexia integration.
+ * Common utility functions for Orca integration.
  */
 
 /**
  * Set environment variables from the variables list.
- * Lexia sends variables in format: [{"name": "OPENAI_API_KEY", "value": "..."}]
+ * Orca sends variables in format: [{"name": "OPENAI_API_KEY", "value": "..."}]
  * @param {Array} variables - List of Variable objects or plain objects
  */
 function setEnvVariables(variables) {
@@ -31,7 +31,7 @@ function setEnvVariables(variables) {
 }
 
 /**
- * Helper class for easy access to user memory data from Lexia requests.
+ * Helper class for easy access to user memory data from Orca requests.
  */
 class MemoryHelper {
   /**
@@ -123,7 +123,7 @@ class MemoryHelper {
 }
 
 /**
- * Helper class for easy access to variables from Lexia requests.
+ * Helper class for easy access to variables from Orca requests.
  */
 class Variables {
   /**

@@ -6,7 +6,7 @@
  */
 
 const {
-  LexiaHandler,
+  OrcaHandler,
   ChatMessage,
   ChatResponse,
   Variable,
@@ -32,12 +32,12 @@ function test(name, fn) {
   }
 }
 
-console.log('🚀 Starting Lexia SDK Package Tests');
+console.log('🚀 Starting Orca SDK Package Tests');
 console.log('==================================================\n');
 
 // Test 1: Basic Imports
 test('Basic Imports', () => {
-  if (!LexiaHandler) throw new Error('LexiaHandler not exported');
+  if (!OrcaHandler) throw new Error('OrcaHandler not exported');
   if (!ChatMessage) throw new Error('ChatMessage not exported');
   if (!ChatResponse) throw new Error('ChatResponse not exported');
   if (!Variable) throw new Error('Variable not exported');
@@ -117,23 +117,23 @@ test('Response Handler', () => {
   console.log(`  ✓ Response created: ${response.status} - ${response.message}`);
 });
 
-// Test 7: LexiaHandler
-test('LexiaHandler', () => {
-  const handler = new LexiaHandler(true); // Dev mode
-  if (!handler) throw new Error('LexiaHandler creation failed');
+// Test 7: OrcaHandler
+test('OrcaHandler', () => {
+  const handler = new OrcaHandler(true); // Dev mode
+  if (!handler) throw new Error('OrcaHandler creation failed');
   if (!handler.devMode) throw new Error('Dev mode not set correctly');
   if (typeof handler.streamChunk !== 'function') throw new Error('streamChunk method missing');
   if (typeof handler.completeResponse !== 'function') throw new Error('completeResponse method missing');
   if (typeof handler.sendError !== 'function') throw new Error('sendError method missing');
-  console.log('  ✓ LexiaHandler created successfully in dev mode');
+  console.log('  ✓ OrcaHandler created successfully in dev mode');
   console.log('  ✓ All required methods exist');
 });
 
 // Test 8: Web Imports (optional)
 test('Web Imports', () => {
   try {
-    const { createLexiaApp, addStandardEndpoints } = require('./src/index');
-    if (createLexiaApp && addStandardEndpoints) {
+    const { createOrcaApp, addStandardEndpoints } = require('./src/index');
+    if (createOrcaApp && addStandardEndpoints) {
       console.log('  ✓ Web utilities available');
     } else {
       console.log('  ⚠️  Web utilities not available (Express not installed)');

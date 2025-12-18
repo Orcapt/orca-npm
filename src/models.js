@@ -1,12 +1,12 @@
 /**
- * Lexia Models
+ * Orca Models
  * ============
  * 
- * Data models for Lexia API communication.
+ * Data models for Orca API communication.
  */
 
 /**
- * Memory model for structured user memory data from Lexia request.
+ * Memory model for structured user memory data from Orca request.
  */
 class Memory {
   constructor(data = {}) {
@@ -20,7 +20,7 @@ class Memory {
 }
 
 /**
- * Variable model for environment variables from Lexia request.
+ * Variable model for environment variables from Orca request.
  */
 class Variable {
   constructor(name, value) {
@@ -30,7 +30,7 @@ class Variable {
 }
 
 /**
- * Request model for chat messages matching Lexia's expected format.
+ * Request model for chat messages matching Orca's expected format.
  */
 class ChatMessage {
   constructor(data) {
@@ -62,7 +62,7 @@ class ChatMessage {
 }
 
 /**
- * Response model for chat requests matching Lexia's expected format.
+ * Response model for chat requests matching Orca's expected format.
  */
 class ChatResponse {
   constructor(status, message, response_uuid, thread_id) {

@@ -1,5 +1,5 @@
 /**
- * Create an Express application with standard Lexia configuration.
+ * Create an Express application with standard Orca configuration.
  * @param {Object} options - Configuration options
  * @param {string} options.title - Application title
  * @param {string} options.version - Application version
@@ -7,10 +7,10 @@
  * @param {boolean} options.debug - Enable debug mode
  * @returns {Object} Configured Express application
  */
-export function createLexiaApp(options?: {
-    title: string;
-    version: string;
-    description: string;
-    debug: boolean;
+export function createOrcaApp(options?: {
+  title: string;
+  version: string;
+  description: string;
+  debug: boolean;
 }): any;
 //# sourceMappingURL=app-factory.d.ts.map

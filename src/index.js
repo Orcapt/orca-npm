@@ -1,8 +1,8 @@
 /**
- * Lexia Integration Package
+ * Orca Integration Package
  * ========================
  * 
- * Clean, minimal package for Lexia platform integration.
+ * Clean, minimal package for Orca platform integration.
  * Contains only essential components for communication.
  */
 
@@ -11,7 +11,7 @@ const VERSION = '1.0.0';
 // Core exports
 const { ChatResponse, ChatMessage, Variable, Memory } = require('./models');
 const { createSuccessResponse } = require('./response-handler');
-const { LexiaHandler } = require('./unified-handler');
+const { OrcaHandler } = require('./unified-handler');
 const { 
   getVariableValue, 
   getOpenAIApiKey, 
@@ -21,14 +21,14 @@ const {
 const { DevStreamClient } = require('./dev-stream-client');
 
 // Web framework utilities (optional)
-let createLexiaApp, addStandardEndpoints;
+let createOrcaApp, addStandardEndpoints;
 try {
   const web = require('./web');
-  createLexiaApp = web.createLexiaApp;
+  createOrcaApp = web.createOrcaApp;
   addStandardEndpoints = web.addStandardEndpoints;
 } catch (err) {
   // Web dependencies not available - continue without them
-  createLexiaApp = undefined;
+  createOrcaApp = undefined;
   addStandardEndpoints = undefined;
 }
 
@@ -39,7 +39,7 @@ module.exports = {
   Variable,
   Memory,
   createSuccessResponse,
-  LexiaHandler,
+  OrcaHandler,
   DevStreamClient,
   getVariableValue,
   getOpenAIApiKey,
@@ -47,7 +47,7 @@ module.exports = {
   MemoryHelper,
   
   // Web (optional)
-  createLexiaApp,
+  createOrcaApp,
   addStandardEndpoints,
   
   // Version

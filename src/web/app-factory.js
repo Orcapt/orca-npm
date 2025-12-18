@@ -1,14 +1,14 @@
 /**
- * Lexia App Factory
+ * Orca App Factory
  * ================
  * 
- * Factory functions for creating Express applications with standard Lexia configuration.
+ * Factory functions for creating Express applications with standard Orca configuration.
  */
 
 const express = require('express');
 
 /**
- * Create an Express application with standard Lexia configuration.
+ * Create an Express application with standard Orca configuration.
  * @param {Object} options - Configuration options
  * @param {string} options.title - Application title
  * @param {string} options.version - Application version
@@ -16,11 +16,11 @@ const express = require('express');
  * @param {boolean} options.debug - Enable debug mode
  * @returns {Object} Configured Express application
  */
-function createLexiaApp(options = {}) {
+function createOrcaApp(options = {}) {
   const {
-    title = 'Lexia AI Agent',
+    title = 'Orca AI Agent',
     version = '1.0.0',
-    description = 'AI agent with Lexia platform integration',
+    description = 'AI agent with Orca platform integration',
     debug = false
   } = options;
 
@@ -61,5 +61,5 @@ function createLexiaApp(options = {}) {
   return app;
 }
 
-module.exports = { createLexiaApp };
+module.exports = { createOrcaApp };
 

@@ -1,8 +1,8 @@
 /**
- * Lexia Standard Endpoints
+ * Orca Standard Endpoints
  * ========================
  * 
- * Standard endpoint patterns for Lexia applications.
+ * Standard endpoint patterns for Orca applications.
  * These can be added to any Express app using addStandardEndpoints().
  */
 
@@ -11,17 +11,17 @@ const { DevStreamClient } = require('../dev-stream-client');
 const { createSuccessResponse } = require('../response-handler');
 
 /**
- * Add standard Lexia endpoints to an Express application.
+ * Add standard Orca endpoints to an Express application.
  * @param {Object} app - Express application instance
  * @param {Object} options - Configuration options
  * @param {Object} options.conversationManager - Optional conversation manager for history endpoints
- * @param {Object} options.lexiaHandler - Optional LexiaHandler instance for communication
+ * @param {Object} options.orcaHandler - Optional OrcaHandler instance for communication
  * @param {Function} options.processMessageFunc - Optional function to process messages (custom AI logic)
  */
 function addStandardEndpoints(app, options = {}) {
   const {
     conversationManager = null,
-    lexiaHandler = null,
+    orcaHandler = null,
     processMessageFunc = null
   } = options;
 
@@ -32,7 +32,7 @@ function addStandardEndpoints(app, options = {}) {
   router.get('/health', (req, res) => {
     res.json({
       status: 'healthy',
-      service: 'Lexia AI Agent',
+      service: 'Orca AI Agent',
       version: app.locals.version || '1.0.0'
     });
   });
@@ -54,7 +54,7 @@ function addStandardEndpoints(app, options = {}) {
   // Root endpoint
   router.get('/', (req, res) => {
     res.json({
-      message: 'Lexia AI Agent - Ready',
+      message: 'Orca AI Agent - Ready',
       endpoints: [
         '/api/v1/health',
         '/api/v1/send_message',
@@ -123,7 +123,7 @@ function addStandardEndpoints(app, options = {}) {
   });
 
   // Main send_message endpoint
-  if (lexiaHandler && processMessageFunc) {
+  if (orcaHandler && processMessageFunc) {
     router.post('/send_message', async (req, res) => {
       try {
         const data = req.body;
@@ -134,7 +134,7 @@ function addStandardEndpoints(app, options = {}) {
         }
 
         // DEV MODE: Return streaming response directly
-        if (lexiaHandler.devMode) {
+        if (orcaHandler.devMode) {
           console.log('🔧 Dev mode: Streaming response directly');
 
           // Clear any existing stream data for this channel

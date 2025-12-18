@@ -1,30 +1,33 @@
-# Lexia Platform Integration Package
+# Orca Platform Integration Package
 
-A clean, minimal Node.js package for seamless integration with the Lexia platform. This package provides essential components for AI agents to communicate with Lexia while maintaining platform-agnostic design.
+A clean, minimal Node.js package for seamless integration with the Orca platform. This package provides essential components for AI agents to communicate with Orca while maintaining platform-agnostic design.
 
 ## 🚀 Quick Start
 
 ### Install from npm (Recommended)
+
 ```bash
-npm install @lexia/sdk
+npm install @orca/sdk
 ```
 
 ### Install with Express dependencies
+
 ```bash
-npm install @lexia/sdk express
+npm install @orca/sdk express
 ```
 
 ### Install from source
+
 ```bash
-git clone https://github.com/Xalantico/lexia-npm.git
-cd lexia-npm
+git clone https://github.com/orcapt/orca-npm.git
+cd orca-npm
 npm install
 npm link
 ```
 
 ## 📦 Package Information
 
-- **Package Name**: `@lexia/sdk`
+- **Package Name**: `@orca/sdk`
 - **Version**: 1.0.0
 - **Node**: >=14.0.0
 - **License**: MIT
@@ -33,18 +36,18 @@ npm link
 
 ## 🎯 Purpose
 
-This package provides a clean interface for AI agents to communicate with the Lexia platform. It handles all Lexia-specific communication while keeping your AI agent completely platform-agnostic.
+This package provides a clean interface for AI agents to communicate with the Orca platform. It handles all Orca-specific communication while keeping your AI agent completely platform-agnostic.
 
 ## 🚀 Core Features
 
 - **Real-time streaming** via Centrifugo
-- **Backend communication** with Lexia API
-- **Response formatting** for Lexia compatibility
+- **Backend communication** with Orca API
+- **Response formatting** for Orca compatibility
 - **Data validation** with class models
 - **Error handling** and logging
 - **Express integration** with standard endpoints (optional)
 - **Dynamic configuration** from request data
-- **Header forwarding** (x-tenant, etc.) to Lexia API
+- **Header forwarding** (x-tenant, etc.) to Orca API
 - **Easy variable access** with Variables helper class
 - **User memory handling** with MemoryHelper for personalized responses
 - **Dev mode** with in-memory streaming for local development
@@ -53,13 +56,13 @@ This package provides a clean interface for AI agents to communicate with the Le
 ## 📁 Package Structure
 
 ```
-@lexia/sdk/
+@orca/sdk/
 ├── src/
 │   ├── index.js               # Package exports with optional web imports
-│   ├── models.js              # Lexia data models (ChatMessage, ChatResponse, Variable)
+│   ├── models.js              # Orca data models (ChatMessage, ChatResponse, Variable)
 │   ├── response-handler.js    # Response creation utilities
 │   ├── unified-handler.js     # Main communication interface
-│   ├── api-client.js          # HTTP communication with Lexia backend
+│   ├── api-client.js          # HTTP communication with Orca backend
 │   ├── centrifugo-client.js   # Real-time updates via Centrifugo
 │   ├── dev-stream-client.js   # Dev mode streaming
 │   ├── utils.js               # Platform utilities
@@ -77,41 +80,39 @@ This package provides a clean interface for AI agents to communicate with the Le
 ## 🚀 Usage Examples
 
 ### Basic Usage
+
 ```javascript
-const { LexiaHandler, ChatMessage } = require('@lexia/sdk');
+const { OrcaHandler, ChatMessage } = require('@orca/sdk');
 
 // Initialize the handler
-const lexia = new LexiaHandler();
+const orca = new OrcaHandler();
 
 // Use in your AI agent
 async function processMessage(data) {
   // Your AI logic here...
-  const response = "Hello from your AI agent!";
-  await lexia.completeResponse(data, response);
+  const response = 'Hello from your AI agent!';
+  await orca.completeResponse(data, response);
 }
 ```
 
 ### Express Integration
+
 ```javascript
 const express = require('express');
-const { 
-  createLexiaApp, 
-  addStandardEndpoints, 
-  LexiaHandler 
-} = require('@lexia/sdk');
+const { createOrcaApp, addStandardEndpoints, OrcaHandler } = require('@orca/sdk');
 
 // Create Express app
-const app = createLexiaApp({
+const app = createOrcaApp({
   title: 'My AI Agent',
   version: '1.0.0'
 });
 
-// Initialize Lexia handler
-const lexia = new LexiaHandler();
+// Initialize Orca handler
+const orca = new OrcaHandler();
 
 // Add standard endpoints
 addStandardEndpoints(app, {
-  lexiaHandler: lexia,
+  orcaHandler: orca,
   processMessageFunc: yourAIFunction
 });
 
@@ -123,52 +124,55 @@ app.listen(8000, () => {
 
 ## 🔧 Core Components
 
-### LexiaHandler (Main Interface)
-Single, clean interface for all Lexia communication:
+### OrcaHandler (Main Interface)
+
+Single, clean interface for all Orca communication:
 
 ```javascript
-const { LexiaHandler } = require('@lexia/sdk');
+const { OrcaHandler } = require('@orca/sdk');
 
 // Initialize with optional dev mode
-const lexia = new LexiaHandler();  // Auto-detects from LEXIA_DEV_MODE env var
+const orca = new OrcaHandler(); // Auto-detects from ORCA_DEV_MODE env var
 // OR
-const lexia = new LexiaHandler(true);  // Explicitly enable dev mode
+const orca = new OrcaHandler(true); // Explicitly enable dev mode
 
 // Stream AI response chunks
-await lexia.streamChunk(data, content);
+await orca.streamChunk(data, content);
 
-// Complete AI response (handles all Lexia communication)
-await lexia.completeResponse(data, fullResponse);
+// Complete AI response (handles all Orca communication)
+await orca.completeResponse(data, fullResponse);
 
 // Send error messages (with optional trace/exception for logging)
-await lexia.sendError(data, errorMessage);
+await orca.sendError(data, errorMessage);
 // Or with exception for detailed logging:
-await lexia.sendError(data, errorMessage, null, error);
+await orca.sendError(data, errorMessage, null, error);
 
 // Update Centrifugo configuration dynamically
-lexia.updateCentrifugoConfig(streamUrl, streamToken);
+orca.updateCentrifugoConfig(streamUrl, streamToken);
 
-// Headers (like x-tenant) are automatically forwarded to Lexia API
+// Headers (like x-tenant) are automatically forwarded to Orca API
 // No additional configuration needed - just include headers in your request
 ```
 
 ### Data Models
-Lexia's expected data formats:
+
+Orca's expected data formats:
 
 ```javascript
-const { ChatMessage, ChatResponse, Variable, Memory } = require('@lexia/sdk');
+const { ChatMessage, ChatResponse, Variable, Memory } = require('@orca/sdk');
 
-// ChatMessage - Lexia's request format with all required fields
-// ChatResponse - Lexia's expected response format  
-// Variable - Environment variables from Lexia request
-// Memory - User memory data from Lexia request
+// ChatMessage - Orca's request format with all required fields
+// ChatResponse - Orca's expected response format
+// Variable - Environment variables from Orca request
+// Memory - User memory data from Orca request
 ```
 
 ### Variables Helper
-Easy access to environment variables from Lexia requests:
+
+Easy access to environment variables from Orca requests:
 
 ```javascript
-const { Variables } = require('@lexia/sdk');
+const { Variables } = require('@orca/sdk');
 
 // Create variables helper from request data
 const vars = new Variables(data.variables);
@@ -184,17 +188,18 @@ if (vars.has('OPENAI_API_KEY')) {
 }
 
 // Get all variable names
-const allNames = vars.listNames();  // ["OPENAI_API_KEY", "ANTHROPIC_API_KEY", ...]
+const allNames = vars.listNames(); // ["OPENAI_API_KEY", "ANTHROPIC_API_KEY", ...]
 
 // Convert to plain object
-const varsDict = vars.toDict();  // {"OPENAI_API_KEY": "sk-...", ...}
+const varsDict = vars.toDict(); // {"OPENAI_API_KEY": "sk-...", ...}
 ```
 
 ### Memory Helper
-Easy access to user memory data from Lexia requests:
+
+Easy access to user memory data from Orca requests:
 
 ```javascript
-const { MemoryHelper } = require('@lexia/sdk');
+const { MemoryHelper } = require('@orca/sdk');
 
 // Create memory helper from request data
 const memory = new MemoryHelper(data.memory);
@@ -228,28 +233,28 @@ if (!memory.isEmpty()) {
 ```
 
 **Supported Memory Formats:**
+
 - `"memory": []` - Empty array (treated as empty memory)
-- `"memory": {}` - Empty object (treated as empty memory)  
+- `"memory": {}` - Empty object (treated as empty memory)
 - `"memory": {"name": "John", "goals": [...]}` - Structured memory
 - `"memory": null` - Null value (treated as empty memory)
 
 ### Response Handler
-Create Lexia-compatible responses:
+
+Create Orca-compatible responses:
 
 ```javascript
-const { createSuccessResponse } = require('@lexia/sdk');
-const { createCompleteResponse } = require('@lexia/sdk/src/response-handler');
+const { createSuccessResponse } = require('@orca/sdk');
+const { createCompleteResponse } = require('@orca/sdk/src/response-handler');
 
 // Create immediate success response
 const response = createSuccessResponse('uuid123', 'thread456');
 
-// Create complete response with usage info (used internally by LexiaHandler)
-const completeResponse = createCompleteResponse(
-  'uuid123',
-  'thread456',
-  'Full AI response',
-  { prompt_tokens: 10, completion_tokens: 50 }
-);
+// Create complete response with usage info (used internally by OrcaHandler)
+const completeResponse = createCompleteResponse('uuid123', 'thread456', 'Full AI response', {
+  prompt_tokens: 10,
+  completion_tokens: 50
+});
 ```
 
 ## 💡 Complete Example: AI Agent with Express
@@ -257,21 +262,21 @@ const completeResponse = createCompleteResponse(
 ```javascript
 const express = require('express');
 const {
-  LexiaHandler,
+  OrcaHandler,
   Variables,
   MemoryHelper,
-  createLexiaApp,
+  createOrcaApp,
   addStandardEndpoints
-} = require('@lexia/sdk');
+} = require('@orca/sdk');
 
 // Initialize services
-const lexia = new LexiaHandler();
+const orca = new OrcaHandler();
 
 // Create Express app
-const app = createLexiaApp({
+const app = createOrcaApp({
   title: 'My AI Agent',
   version: '1.0.0',
-  description: 'Custom AI agent with Lexia integration'
+  description: 'Custom AI agent with Orca integration'
 });
 
 // Define your AI logic
@@ -279,23 +284,23 @@ async function processMessage(data) {
   try {
     // Easy access to environment variables
     const vars = new Variables(data.variables);
-    
+
     // Easy access to user memory
     const memory = new MemoryHelper(data.memory);
-    
+
     // Get API keys
     const openaiKey = vars.get('OPENAI_API_KEY');
-    
+
     // Get user information for personalized responses
     const userName = memory.getName();
     const userGoals = memory.getGoals();
-    
+
     // Check if required variables exist
     if (!openaiKey) {
-      await lexia.sendError(data, 'No AI API key provided');
+      await orca.sendError(data, 'No AI API key provided');
       return;
     }
-    
+
     // Create personalized response based on user memory
     let response;
     if (memory.hasName()) {
@@ -303,32 +308,31 @@ async function processMessage(data) {
     } else {
       response = `AI Agent processed: ${data.message}`;
     }
-    
+
     // Add user-specific context if available
     if (memory.hasGoals()) {
       response += `\n\nI see your goals include: ${userGoals.join(', ')}`;
     }
-    
+
     // Stream response chunks (optional)
     const words = response.split(' ');
     for (const word of words) {
-      await lexia.streamChunk(data, word + ' ');
+      await orca.streamChunk(data, word + ' ');
       await new Promise(resolve => setTimeout(resolve, 100));
     }
-    
+
     // Complete the response
-    await lexia.completeResponse(data, response);
-    
+    await orca.completeResponse(data, response);
   } catch (error) {
     // Handle errors appropriately with trace logging
-    await lexia.sendError(data, `Error processing message: ${error.message}`, null, error);
+    await orca.sendError(data, `Error processing message: ${error.message}`, null, error);
   }
 }
 
-// Add all standard Lexia endpoints
+// Add all standard Orca endpoints
 addStandardEndpoints(app, {
   conversationManager: null,
-  lexiaHandler: lexia,
+  orcaHandler: orca,
   processMessageFunc: processMessage
 });
 
@@ -342,20 +346,20 @@ app.listen(PORT, () => {
 ## 🔄 Integration Flow
 
 ```
-Your AI Agent → LexiaHandler → Lexia Platform
+Your AI Agent → OrcaHandler → Orca Platform
      ↓              ↓              ↓
   AI/LLM Logic   Communication   Real-time + Backend
 ```
 
-Your AI agent focuses on AI logic, this package handles all Lexia communication complexity behind a clean interface.
+Your AI agent focuses on AI logic, this package handles all Orca communication complexity behind a clean interface.
 
 ## 🧪 Testing
 
 ```javascript
-const { LexiaHandler } = require('@lexia/sdk');
+const { OrcaHandler } = require('@orca/sdk');
 
 // Test basic functionality
-const handler = new LexiaHandler();
+const handler = new OrcaHandler();
 
 // Create test data
 const testData = {
@@ -381,30 +385,37 @@ console.assert(typeof handler.updateCentrifugoConfig === 'function');
 ## 🚨 Common Issues and Solutions
 
 ### Import Error
+
 ```
-Error: Cannot find module '@lexia/sdk'
+Error: Cannot find module '@orca/sdk'
 ```
-**Solution**: Ensure the package is installed: `npm install @lexia/sdk`
+
+**Solution**: Ensure the package is installed: `npm install @orca/sdk`
 
 ### Missing Dependencies
+
 ```
 Error: Cannot find module 'express'
 ```
+
 **Solution**: Install express if using web features: `npm install express`
 
-### Lexia Communication Fails
-**Solution**: Verify that your environment variables and API keys are properly configured in the Lexia request variables.
+### Orca Communication Fails
+
+**Solution**: Verify that your environment variables and API keys are properly configured in the Orca request variables.
 
 ## 📦 Publishing
 
 ### Test npm
+
 ```bash
 npm pack
 # Test the package locally
-npm install ./lexia-sdk-1.2.5.tgz
+npm install ./orca-sdk-1.2.5.tgz
 ```
 
 ### Production npm
+
 ```bash
 npm login
 npm publish --access public
@@ -414,24 +425,24 @@ npm publish --access public
 
 1. **Single Responsibility**: Each component has one clear purpose
 2. **Clean Interface**: Simple, intuitive methods
-3. **Platform Agnostic**: Your AI agent doesn't know about Lexia internals
+3. **Platform Agnostic**: Your AI agent doesn't know about Orca internals
 4. **Minimal Dependencies**: Only what's absolutely necessary
 5. **Easy Testing**: Simple, focused components
 6. **Dynamic Configuration**: Adapts to request-specific settings
 
 ## 🚀 Benefits
 
-- **Clean separation** between your AI agent and Lexia
-- **Easy to maintain** - all Lexia logic in one place
+- **Clean separation** between your AI agent and Orca
+- **Easy to maintain** - all Orca logic in one place
 - **Easy to replace** - switch platforms by replacing this package
 - **Professional structure** - clean, organized code
 - **Fast development** - no complex integrations to manage
 - **Drop-in replacement** - install and start using immediately
-- **Dynamic configuration** - adapts to different Lexia environments
+- **Dynamic configuration** - adapts to different Orca environments
 
 ## 📞 Support
 
-This package is designed to be a drop-in solution - just `npm install @lexia/sdk` and start building your AI agent! All Lexia communication is handled automatically, standard endpoints are provided out-of-the-box, and your AI agent remains completely platform-agnostic.
+This package is designed to be a drop-in solution - just `npm install @orca/sdk` and start building your AI agent! All Orca communication is handled automatically, standard endpoints are provided out-of-the-box, and your AI agent remains completely platform-agnostic.
 
 ## 📄 License
 
@@ -447,7 +458,6 @@ For more detailed documentation, please refer to the inline code comments and ex
 
 ## 🔗 Links
 
-- [GitHub Repository](https://github.com/Xalantico/lexia-npm)
-- [npm Package](https://www.npmjs.com/package/@lexia/sdk)
-- [Issue Tracker](https://github.com/Xalantico/lexia-npm/issues)
-
+- [GitHub Repository](https://github.com/orcapt/orca-npm)
+- [npm Package](https://www.npmjs.com/package/@orca/sdk)
+- [Issue Tracker](https://github.com/orcapt/orca-npm/issues)

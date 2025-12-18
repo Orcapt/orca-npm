@@ -1,5 +1,5 @@
 /**
- * Type definitions for @lexia/sdk
+ * Type definitions for @orca/sdk
  */
 
 export const VERSION: string;
@@ -12,14 +12,14 @@ export class Memory {
   interests: string[];
   preferences: string[];
   past_experiences: string[];
-  
+
   constructor(data?: Partial<Memory>);
 }
 
 export class Variable {
   name: string;
   value: string;
-  
+
   constructor(name: string, value: string);
 }
 
@@ -75,7 +75,7 @@ export class ChatMessage {
   stream_url: string | null;
   stream_token: string | null;
   headers: Record<string, string> | null;
-  
+
   constructor(data: ChatMessageData);
 }
 
@@ -84,7 +84,7 @@ export class ChatResponse {
   message: string;
   response_uuid: string;
   thread_id: string;
-  
+
   constructor(status: string, message: string, response_uuid: string, thread_id: string);
 }
 
@@ -103,7 +103,12 @@ export class CentrifugoClient {
   updateConfig(url: string, apiKey: string): void;
   send(channel: string, data: Record<string, any>): Promise<void>;
   sendDelta(channel: string, uuid: string, threadId: string, delta: string): Promise<void>;
-  sendCompletion(channel: string, uuid: string, threadId: string, fullResponse: string): Promise<void>;
+  sendCompletion(
+    channel: string,
+    uuid: string,
+    threadId: string,
+    fullResponse: string
+  ): Promise<void>;
   sendError(channel: string, uuid: string, threadId: string, errorMessage: string): Promise<void>;
 }
 
@@ -140,9 +145,9 @@ export function createCompleteResponse(
 ): Record<string, any>;
 
 // Unified Handler
-export class LexiaHandler {
+export class OrcaHandler {
   devMode: boolean;
-  
+
   constructor(devMode?: boolean | null);
   updateCentrifugoConfig(streamUrl: string, streamToken: string): void;
   streamChunk(data: ChatMessage | ChatMessageData, content: string): Promise<void>;
@@ -183,7 +188,10 @@ export class Variables {
 }
 
 export function setEnvVariables(variables: Variable[] | any[]): void;
-export function getVariableValue(variables: Variable[] | any[], variableName: string): string | null;
+export function getVariableValue(
+  variables: Variable[] | any[],
+  variableName: string
+): string | null;
 export function getOpenAIApiKey(variables: Variable[] | any[]): string | null;
 export function formatSystemPrompt(
   systemMessage?: string | null,
@@ -205,19 +213,9 @@ export interface AppOptions {
 
 export interface EndpointOptions {
   conversationManager?: any;
-  lexiaHandler?: LexiaHandler;
+  orcaHandler?: OrcaHandler;
   processMessageFunc?: (data: ChatMessage | ChatMessageData) => Promise<void>;
 }
 
-export function createLexiaApp(options?: AppOptions): any;
+export function createOrcaApp(options?: AppOptions): any;
 export function addStandardEndpoints(app: any, options?: EndpointOptions): any;
-
-
-
-
-
-
-
-
-
-

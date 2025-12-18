@@ -1,30 +1,31 @@
 # Python to JavaScript Mapping
 
-This document shows the equivalence between the Python (`lexia-pip`) and JavaScript (`@lexia/sdk`) implementations.
+This document shows the equivalence between the Python (`orca-pip`) and JavaScript (`@orca/sdk`) implementations.
 
 ## Package Structure
 
-| Python (lexia-pip) | JavaScript (@lexia/sdk) |
-|-------------------|------------------------|
-| `lexia/__init__.py` | `src/index.js` |
-| `lexia/models.py` | `src/models.js` |
-| `lexia/api_client.py` | `src/api-client.js` |
-| `lexia/centrifugo_client.py` | `src/centrifugo-client.js` |
-| `lexia/dev_stream_client.py` | `src/dev-stream-client.js` |
-| `lexia/response_handler.py` | `src/response-handler.js` |
-| `lexia/unified_handler.py` | `src/unified-handler.js` |
-| `lexia/utils.py` | `src/utils.js` |
-| `lexia/web/` | `src/web/` |
-| `setup.py` | `package.json` |
-| `requirements.txt` | `dependencies` in package.json |
+| Python (orca-pip)           | JavaScript (@orca/sdk)         |
+| --------------------------- | ------------------------------ |
+| `orca/__init__.py`          | `src/index.js`                 |
+| `orca/models.py`            | `src/models.js`                |
+| `orca/api_client.py`        | `src/api-client.js`            |
+| `orca/centrifugo_client.py` | `src/centrifugo-client.js`     |
+| `orca/dev_stream_client.py` | `src/dev-stream-client.js`     |
+| `orca/response_handler.py`  | `src/response-handler.js`      |
+| `orca/unified_handler.py`   | `src/unified-handler.js`       |
+| `orca/utils.py`             | `src/utils.js`                 |
+| `orca/web/`                 | `src/web/`                     |
+| `setup.py`                  | `package.json`                 |
+| `requirements.txt`          | `dependencies` in package.json |
 
 ## Core Classes
 
 ### Models
 
 **Python:**
+
 ```python
-from lexia import ChatMessage, ChatResponse, Variable, Memory
+from orca import ChatMessage, ChatResponse, Variable, Memory
 
 message = ChatMessage(data)
 response = ChatResponse("success", "Processing", uuid, thread_id)
@@ -33,42 +34,46 @@ memory = Memory(name="John", goals=["AI"])
 ```
 
 **JavaScript:**
+
 ```javascript
-const { ChatMessage, ChatResponse, Variable, Memory } = require('@lexia/sdk');
+const { ChatMessage, ChatResponse, Variable, Memory } = require('@orca/sdk');
 
 const message = new ChatMessage(data);
-const response = new ChatResponse("success", "Processing", uuid, threadId);
-const variable = new Variable("KEY", "value");
-const memory = new Memory({ name: "John", goals: ["AI"] });
+const response = new ChatResponse('success', 'Processing', uuid, threadId);
+const variable = new Variable('KEY', 'value');
+const memory = new Memory({ name: 'John', goals: ['AI'] });
 ```
 
-### LexiaHandler
+### OrcaHandler
 
 **Python:**
-```python
-from lexia import LexiaHandler
 
-lexia = LexiaHandler(dev_mode=True)
-lexia.stream_chunk(data, content)
-lexia.complete_response(data, response)
-lexia.send_error(data, error_message)
+```python
+from orca import OrcaHandler
+
+orca = OrcaHandler(dev_mode=True)
+orca.stream_chunk(data, content)
+orca.complete_response(data, response)
+orca.send_error(data, error_message)
 ```
 
 **JavaScript:**
-```javascript
-const { LexiaHandler } = require('@lexia/sdk');
 
-const lexia = new LexiaHandler(true);
-await lexia.streamChunk(data, content);
-await lexia.completeResponse(data, response);
-await lexia.sendError(data, errorMessage);
+```javascript
+const { OrcaHandler } = require('@orca/sdk');
+
+const orca = new OrcaHandler(true);
+await orca.streamChunk(data, content);
+await orca.completeResponse(data, response);
+await orca.sendError(data, errorMessage);
 ```
 
 ### Variables Helper
 
 **Python:**
+
 ```python
-from lexia import Variables
+from orca import Variables
 
 vars = Variables(data.variables)
 api_key = vars.get("OPENAI_API_KEY")
@@ -78,12 +83,13 @@ vars_dict = vars.to_dict()
 ```
 
 **JavaScript:**
+
 ```javascript
-const { Variables } = require('@lexia/sdk');
+const { Variables } = require('@orca/sdk');
 
 const vars = new Variables(data.variables);
-const apiKey = vars.get("OPENAI_API_KEY");
-const hasKey = vars.has("OPENAI_API_KEY");
+const apiKey = vars.get('OPENAI_API_KEY');
+const hasKey = vars.has('OPENAI_API_KEY');
 const allNames = vars.listNames();
 const varsDict = vars.toDict();
 ```
@@ -91,8 +97,9 @@ const varsDict = vars.toDict();
 ### Memory Helper
 
 **Python:**
+
 ```python
-from lexia import MemoryHelper
+from orca import MemoryHelper
 
 memory = MemoryHelper(data.memory)
 name = memory.get_name()
@@ -104,8 +111,9 @@ memory_dict = memory.to_dict()
 ```
 
 **JavaScript:**
+
 ```javascript
-const { MemoryHelper } = require('@lexia/sdk');
+const { MemoryHelper } = require('@orca/sdk');
 
 const memory = new MemoryHelper(data.memory);
 const name = memory.getName();
@@ -122,18 +130,18 @@ const memoryDict = memory.toDict();
 
 ```python
 from fastapi import FastAPI
-from lexia import create_lexia_app, add_standard_endpoints, LexiaHandler
+from orca import create_orca_app, add_standard_endpoints, OrcaHandler
 
-app = create_lexia_app(title="My AI Agent")
-lexia = LexiaHandler()
+app = create_orca_app(title="My AI Agent")
+orca = OrcaHandler()
 
 async def process_message(data):
     response = "Hello!"
-    lexia.complete_response(data, response)
+    orca.complete_response(data, response)
 
 add_standard_endpoints(
     app,
-    lexia_handler=lexia,
+    orca_handler=orca,
     process_message_func=process_message
 )
 
@@ -144,18 +152,18 @@ add_standard_endpoints(
 
 ```javascript
 const express = require('express');
-const { createLexiaApp, addStandardEndpoints, LexiaHandler } = require('@lexia/sdk');
+const { createOrcaApp, addStandardEndpoints, OrcaHandler } = require('@orca/sdk');
 
-const app = createLexiaApp({ title: "My AI Agent" });
-const lexia = new LexiaHandler();
+const app = createOrcaApp({ title: 'My AI Agent' });
+const orca = new OrcaHandler();
 
 async function processMessage(data) {
-  const response = "Hello!";
-  await lexia.completeResponse(data, response);
+  const response = 'Hello!';
+  await orca.completeResponse(data, response);
 }
 
 addStandardEndpoints(app, {
-  lexiaHandler: lexia,
+  orcaHandler: orca,
   processMessageFunc: processMessage
 });
 
@@ -166,6 +174,7 @@ app.listen(8000, () => console.log('Server running'));
 ## Naming Conventions
 
 ### Python Style (snake_case)
+
 - `stream_chunk`
 - `complete_response`
 - `send_error`
@@ -174,6 +183,7 @@ app.listen(8000, () => console.log('Server running'));
 - `to_dict`
 
 ### JavaScript Style (camelCase)
+
 - `streamChunk`
 - `completeResponse`
 - `sendError`
@@ -184,11 +194,13 @@ app.listen(8000, () => console.log('Server running'));
 ## Async/Await
 
 **Python:**
+
 - Uses `async def` for async functions
 - Uses `await` for async calls
 - FastAPI handles async automatically
 
 **JavaScript:**
+
 - Uses `async function` for async functions
 - Uses `await` for async calls (Promises)
 - Express requires manual async handling
@@ -196,12 +208,14 @@ app.listen(8000, () => console.log('Server running'));
 ## Dependencies
 
 ### Python
+
 - `requests` → JavaScript: `axios`
 - `pydantic` → JavaScript: Plain classes
 - `fastapi` → JavaScript: `express` (optional peer dependency)
 - `uvicorn` → JavaScript: Built into Node.js HTTP
 
 ### JavaScript
+
 - Core: `axios` only
 - Optional: `express` for web features
 - Dev: TypeScript, ESLint, Prettier, Jest
@@ -209,22 +223,25 @@ app.listen(8000, () => console.log('Server running'));
 ## Installation
 
 **Python:**
+
 ```bash
-pip install lexia
-pip install lexia[web]  # With FastAPI
+pip install orca
+pip install orca[web]  # With FastAPI
 ```
 
 **JavaScript:**
+
 ```bash
-npm install @lexia/sdk
-npm install @lexia/sdk express  # With Express
+npm install @orca/sdk
+npm install @orca/sdk express  # With Express
 ```
 
 ## Environment Variables
 
 **Both:**
+
 ```bash
-export LEXIA_DEV_MODE=true
+export ORCA_DEV_MODE=true
 export CENTRIFUGO_URL=http://centrifugo:8000
 export CENTRIFUGO_API_KEY=my_api_key
 ```
@@ -232,12 +249,14 @@ export CENTRIFUGO_API_KEY=my_api_key
 ## Testing
 
 **Python:**
+
 ```bash
 python test_package.py
 pytest  # With pytest
 ```
 
 **JavaScript:**
+
 ```bash
 node test-package.js
 npm test  # With Jest
@@ -246,12 +265,14 @@ npm test  # With Jest
 ## Publishing
 
 **Python:**
+
 ```bash
 python -m build
 twine upload dist/*
 ```
 
 **JavaScript:**
+
 ```bash
 npm pack  # Test
 npm publish --access public
@@ -269,7 +290,8 @@ npm publish --access public
 ## Feature Parity
 
 ✅ Both implementations support:
-- LexiaHandler with dev/production modes
+
+- OrcaHandler with dev/production modes
 - Real-time streaming via Centrifugo
 - Dev mode in-memory streaming
 - Variables and Memory helpers
@@ -281,16 +303,6 @@ npm publish --access public
 
 ## Version Compatibility
 
-- Python: `lexia` v1.2.5
-- JavaScript: `@lexia/sdk` v1.2.5
+- Python: `orca` v1.2.5
+- JavaScript: `@orca/sdk` v1.2.5
 - Both versions have identical API and features
-
-
-
-
-
-
-
-
-
-

@@ -2,21 +2,21 @@
  * Example Usage
  * =============
  * 
- * This file demonstrates how to use the @lexia/sdk package.
+ * This file demonstrates how to use the @orca/sdk package.
  */
 
 const {
-  LexiaHandler,
+  OrcaHandler,
   Variables,
   MemoryHelper,
   createSuccessResponse
 } = require('./src/index');
 
 // Example 1: Basic Usage
-console.log('=== Example 1: Basic LexiaHandler ===\n');
+console.log('=== Example 1: Basic OrcaHandler ===\n');
 
-const lexia = new LexiaHandler(true); // Dev mode
-console.log('✓ LexiaHandler created in dev mode');
+const orca = new OrcaHandler(true); // Dev mode
+console.log('✓ OrcaHandler created in dev mode');
 
 // Example 2: Working with Variables
 console.log('\n=== Example 2: Variables Helper ===\n');
@@ -90,8 +90,8 @@ async function simulateMessageProcessing() {
   console.log('AI Response:', aiResponse);
 
   // In a real scenario, you would call:
-  // await lexia.streamChunk(testData, aiResponse);
-  // await lexia.completeResponse(testData, aiResponse);
+  // await orca.streamChunk(testData, aiResponse);
+  // await orca.completeResponse(testData, aiResponse);
   
   console.log('✓ Message processing complete');
 }
@@ -106,12 +106,12 @@ simulateMessageProcessing().then(() => {
 console.log('\n=== Example 6: Express Integration (Optional) ===\n');
 
 try {
-  const { createLexiaApp, addStandardEndpoints } = require('./src/index');
+  const { createOrcaApp, addStandardEndpoints } = require('./src/index');
   
-  if (createLexiaApp && addStandardEndpoints) {
+  if (createOrcaApp && addStandardEndpoints) {
     console.log('✓ Express integration available');
-    console.log('  Use createLexiaApp() to create an Express app');
-    console.log('  Use addStandardEndpoints() to add Lexia endpoints');
+    console.log('  Use createOrcaApp() to create an Express app');
+    console.log('  Use addStandardEndpoints() to add Orca endpoints');
   } else {
     console.log('⚠️  Express integration not available (install express)');
   }

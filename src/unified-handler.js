@@ -1,8 +1,8 @@
 /**
- * Unified Lexia Handler
+ * Unified Orca Handler
  * =====================
  * 
- * Single, clean interface for all Lexia platform communication.
+ * Single, clean interface for all Orca platform communication.
  * Supports both production (Centrifugo) and dev mode (in-memory streaming).
  */
 
@@ -11,16 +11,16 @@ const { DevStreamClient } = require('./dev-stream-client');
 const { APIClient } = require('./api-client');
 const { createCompleteResponse } = require('./response-handler');
 
-class LexiaHandler {
+class OrcaHandler {
   /**
-   * Initialize LexiaHandler with optional dev mode.
+   * Initialize OrcaHandler with optional dev mode.
    * @param {boolean} devMode - If true, uses DevStreamClient instead of Centrifugo.
-   *                           If null/undefined, checks LEXIA_DEV_MODE environment variable.
+   *                           If null/undefined, checks ORCA_DEV_MODE environment variable.
    */
   constructor(devMode = null) {
     // Determine dev mode from parameter or environment
     if (devMode === null || devMode === undefined) {
-      const envValue = (process.env.LEXIA_DEV_MODE || 'false').toLowerCase();
+      const envValue = (process.env.ORCA_DEV_MODE || 'false').toLowerCase();
       devMode = ['true', '1', 'yes'].includes(envValue);
     }
     
@@ -29,10 +29,10 @@ class LexiaHandler {
     // Initialize appropriate streaming client
     if (this.devMode) {
       this.streamClient = new DevStreamClient();
-      console.log('🔧 LexiaHandler initialized in DEV MODE (no Centrifugo)');
+      console.log('🔧 OrcaHandler initialized in DEV MODE (no Centrifugo)');
     } else {
       this.streamClient = new CentrifugoClient();
-      console.log('🚀 LexiaHandler initialized in PRODUCTION MODE (Centrifugo)');
+      console.log('🚀 OrcaHandler initialized in PRODUCTION MODE (Centrifugo)');
     }
     
     this.api = new APIClient();
@@ -42,15 +42,15 @@ class LexiaHandler {
     
     // Semantic marker aliases (developer-friendly strings)
     this._markerAliases = new Map([
-      ['show image load', '[lexia.loading.image.start]\n\n'],
-      ['end image load', '[lexia.loading.image.end]\n\n'],
-      ['hide image load', '[lexia.loading.image.end]\n\n'],
-      ['show code load', '[lexia.loading.code.start]\n\n'],
-      ['end code load', '[lexia.loading.code.end]\n\n'],
-      ['show search load', '[lexia.loading.search.start]\n\n'],
-      ['end search load', '[lexia.loading.search.end]\n\n'],
-      ['show thinking load', '[lexia.loading.thinking.start]\n\n'],
-      ['end thinking load', '[lexia.loading.thinking.end]\n\n'],
+      ['show image load', '[orca.loading.image.start]\n\n'],
+      ['end image load', '[orca.loading.image.end]\n\n'],
+      ['hide image load', '[orca.loading.image.end]\n\n'],
+      ['show code load', '[orca.loading.code.start]\n\n'],
+      ['end code load', '[orca.loading.code.end]\n\n'],
+      ['show search load', '[orca.loading.search.start]\n\n'],
+      ['end search load', '[orca.loading.search.end]\n\n'],
+      ['show thinking load', '[orca.loading.thinking.start]\n\n'],
+      ['end thinking load', '[orca.loading.thinking.end]\n\n'],
     ]);
   }
 
@@ -117,7 +117,7 @@ class LexiaHandler {
   }
 
   /**
-   * Complete AI response and send to Lexia.
+   * Complete AI response and send to Orca.
    * Uses DevStreamClient in dev mode, Centrifugo in production.
    * @param {Object} data - Request data
    * @param {string} fullResponse - Complete AI response
@@ -172,27 +172,27 @@ class LexiaHandler {
       return;
     }
     
-    console.log('=== SENDING TO LEXIA API ===');
+    console.log('=== SENDING TO ORCA API ===');
     console.log(`URL: ${data.url}`);
     console.log('Headers:', requestHeaders);
     console.log('Data:', backendData);
     
-    // Send to Lexia backend with headers
+    // Send to Orca backend with headers
     try {
       const response = await this.api.post(data.url, backendData, requestHeaders);
       
-      console.log('=== LEXIA API RESPONSE ===');
+      console.log('=== ORCA API RESPONSE ===');
       console.log(`Status Code: ${response.status}`);
       console.log('Response Headers:', response.headers);
       console.log('Response Content:', response.data);
       
       if (response.status !== 200) {
-        console.error(`LEXIA API ERROR: ${response.status} - ${response.data}`);
+        console.error(`ORCA API ERROR: ${response.status} - ${response.data}`);
       } else {
-        console.log('✅ LEXIA API SUCCESS: Response accepted');
+        console.log('✅ ORCA API SUCCESS: Response accepted');
       }
     } catch (error) {
-      console.error(`Failed to send to Lexia API:`, error.message);
+      console.error(`Failed to send to Orca API:`, error.message);
     }
   }
 
@@ -273,24 +273,24 @@ class LexiaHandler {
       console.log('Extracted headers from request for error:', requestHeaders);
     }
     
-    console.log('=== SENDING ERROR TO LEXIA API ===');
+    console.log('=== SENDING ERROR TO ORCA API ===');
     console.log(`URL: ${data.url}`);
     console.log('Headers:', requestHeaders);
     console.log('Error Data:', errorResponse);
     
-    // Send error to Lexia backend with headers
+    // Send error to Orca backend with headers
     try {
       const response = await this.api.post(data.url, errorResponse, requestHeaders);
       
-      console.log('=== LEXIA ERROR API RESPONSE ===');
+      console.log('=== ORCA ERROR API RESPONSE ===');
       console.log(`Status Code: ${response.status}`);
       console.log('Response Headers:', response.headers);
       console.log('Response Content:', response.data);
       
       if (response.status !== 200) {
-        console.error(`LEXIA ERROR API FAILED: ${response.status} - ${response.data}`);
+        console.error(`ORCA ERROR API FAILED: ${response.status} - ${response.data}`);
       } else {
-        console.log('✅ LEXIA ERROR API SUCCESS: Error persisted to backend');
+        console.log('✅ ORCA ERROR API SUCCESS: Error persisted to backend');
       }
     } catch (error) {
       console.error(`Failed to persist error to backend API:`, error.message);
@@ -318,7 +318,7 @@ class LexiaHandler {
         message: errorMessage.substring(0, 1000), // Max 1000 chars as per validation
         trace: traceInfo ? traceInfo.substring(0, 5000) : '', // Max 5000 chars as per validation
         level: 'error', // error, warning, info, or critical
-        where: 'lexia-sdk', // Where the error occurred
+        where: 'orca-sdk', // Where the error occurred
         additional: {
           uuid: data.response_uuid,
           conversation_id: data.conversation_id,
@@ -327,30 +327,30 @@ class LexiaHandler {
         }
       };
       
-      console.log('=== SENDING ERROR LOG TO LEXIA ===');
+      console.log('=== SENDING ERROR LOG TO ORCA ===');
       console.log(`Log URL: ${logUrl}`);
       console.log('Log Payload:', logPayload);
       
       // Send to logging endpoint
       const logResponse = await this.api.post(logUrl, logPayload, requestHeaders);
       
-      console.log('=== LEXIA LOG API RESPONSE ===');
+      console.log('=== ORCA LOG API RESPONSE ===');
       console.log(`Status Code: ${logResponse.status}`);
       console.log('Response Content:', logResponse.data);
       
       if (logResponse.status !== 200) {
-        console.error(`LEXIA LOG API FAILED: ${logResponse.status} - ${logResponse.data}`);
+        console.error(`ORCA LOG API FAILED: ${logResponse.status} - ${logResponse.data}`);
       } else {
-        console.log('✅ LEXIA LOG API SUCCESS: Error logged to backend');
+        console.log('✅ ORCA LOG API SUCCESS: Error logged to backend');
       }
     } catch (error) {
-      console.error(`Failed to send error log to Lexia:`, error.message);
+      console.error(`Failed to send error log to Orca:`, error.message);
     }
   }
 }
 
 // Session object to avoid passing data repeatedly
-class LexiaSession {
+class OrcaSession {
   constructor(handler, data) {
     this._h = handler;
     this._d = data;
@@ -366,17 +366,17 @@ class LexiaSession {
   _loadingMarker(kind, action) {
     const k = (kind || 'thinking').toLowerCase();
     const a = action === 'start' ? 'start' : 'end';
-    return `[lexia.loading.${['image','code','search','thinking'].includes(k)?k:'thinking'}.${a}]\n\n`;
+    return `[orca.loading.${['image','code','search','thinking'].includes(k)?k:'thinking'}.${a}]\n\n`;
   }
   async start_loading(kind = 'thinking') { return this.stream(this._loadingMarker(kind, 'start')); }
   async end_loading(kind = 'thinking') { return this.stream(this._loadingMarker(kind, 'end')); }
-  async image(url) { if (url) return this.stream(`[lexia.image.start]${url}[lexia.image.end]`); }
+  async image(url) { if (url) return this.stream(`[orca.image.start]${url}[orca.image.end]`); }
   async pass_image(url) { return this.image(url); }
 }
 
-LexiaHandler.prototype.begin = function(data) { return new LexiaSession(this, data); };
+OrcaHandler.prototype.begin = function(data) { return new OrcaSession(this, data); };
 
-module.exports = { LexiaHandler };
+module.exports = { OrcaHandler };
 
 
 

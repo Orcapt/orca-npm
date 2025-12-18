@@ -2,7 +2,7 @@
  * API Client
  * ==========
  * 
- * Handles HTTP communication with external services for Lexia integration.
+ * Handles HTTP communication with external services for Orca integration.
  */
 
 const axios = require('axios');

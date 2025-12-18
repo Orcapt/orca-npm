@@ -1,4 +1,4 @@
-# Makefile for @lexia/sdk
+# Makefile for @orca/sdk
 
 .PHONY: help install test lint format build clean pack publish-test publish
 

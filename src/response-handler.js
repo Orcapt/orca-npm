@@ -1,14 +1,14 @@
 /**
- * Lexia Response Handler
+ * Orca Response Handler
  * ======================
  * 
- * Handles creation of Lexia-compatible API responses.
+ * Handles creation of Orca-compatible API responses.
  */
 
 const { ChatResponse } = require('./models');
 
 /**
- * Create a standard success response for Lexia.
+ * Create a standard success response for Orca.
  * @param {string} responseUuid - Response UUID
  * @param {string} threadId - Thread ID
  * @param {string} message - Message (default: "Processing started")
@@ -19,7 +19,7 @@ function createSuccessResponse(responseUuid, threadId, message = 'Processing sta
 }
 
 /**
- * Create a complete response with all required fields for Lexia API.
+ * Create a complete response with all required fields for Orca API.
  * @param {string} responseUuid - Response UUID
  * @param {string} threadId - Thread ID
  * @param {string} content - Response content

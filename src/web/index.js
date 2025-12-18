@@ -1,16 +1,16 @@
 /**
- * Lexia Web Package
+ * Orca Web Package
  * ================
  * 
- * Web framework utilities for creating Express applications with Lexia integration.
+ * Web framework utilities for creating Express applications with Orca integration.
  * Provides standard endpoints, middleware, and app factory functions.
  */
 
-const { createLexiaApp } = require('./app-factory');
+const { createOrcaApp } = require('./app-factory');
 const { addStandardEndpoints } = require('./endpoints');
 
 module.exports = {
-  createLexiaApp,
+  createOrcaApp,
   addStandardEndpoints
 };
 

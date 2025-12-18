@@ -8,12 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.2] - 2025-01-14
 
 ### Added
-- Error logging to Lexia backend via `/api/internal/v1/logs` endpoint
+
+- Error logging to Orca backend via `/api/internal/v1/logs` endpoint
 - Enhanced `sendError()` method with optional `trace` and `exception` parameters for detailed error logging
 - Automatic extraction and truncation of stack traces for error logs
 - Support for error level, location tracking, and additional metadata in error logs
 
 ### Fixed
+
 - Fixed Centrifugo client to send actual error message instead of hardcoded text
 - Fixed dev mode error streaming to match normal response flow (delta + complete)
 - Improved error message visibility in both dev and production modes
@@ -21,26 +23,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.1] - 2024-10-13
 
 ### Fixed
+
 - Minor bug fixes and improvements
 
 ## [1.0.0] - 2024-10-12
 
 ### Added
-- Initial release of @lexia/sdk npm package (first version)
-- LexiaHandler for unified Lexia platform communication
+
+- Initial release of @orca/sdk npm package (first version)
+- OrcaHandler for unified Orca platform communication
 - ChatMessage and ChatResponse models
 - Variables helper class for easy variable access
 - MemoryHelper class for user memory handling
 - APIClient for HTTP communication
 - CentrifugoClient for real-time messaging
 - DevStreamClient for local development streaming
-- Express integration with createLexiaApp and addStandardEndpoints
+- Express integration with createOrcaApp and addStandardEndpoints
 - Support for dev mode and production mode
 - Dynamic Centrifugo configuration
 - Header forwarding support
 - Comprehensive documentation and examples
 
 ### Features
+
 - Real-time streaming via Centrifugo
 - In-memory streaming for development
 - Backend API communication
@@ -52,9 +57,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Planned
+
 - TypeScript full migration
 - WebSocket support
 - Enhanced error handling
 - Performance optimizations
 - Additional helper utilities
-

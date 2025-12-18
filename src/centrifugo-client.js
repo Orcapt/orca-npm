@@ -2,7 +2,7 @@
  * Centrifugo Client
  * ================
  * 
- * Handles real-time messaging via Centrifugo for Lexia integration.
+ * Handles real-time messaging via Centrifugo for Orca integration.
  */
 
 const axios = require('axios');
