@@ -66,14 +66,18 @@ jobs:
               id: set-target
               run: |
                   TARGET_REPO="${{ secrets.TARGET_REPO || github.event.inputs.target_repo }}"
+                  # Fallback to default if empty
                   if [[ -z "$TARGET_REPO" ]]; then
-                    echo "Error: TARGET_REPO secret or input is required"
-                    exit 1
+                    TARGET_REPO="Orcapt/orca-ui-npm"
                   fi
-                  # Convert URL to owner/repo format if needed
-                  if [[ "$TARGET_REPO" == https://github.com/* ]]; then
-                    TARGET_REPO=$(echo "$TARGET_REPO" | sed 's|https://github.com/||' | sed 's|\.git$||')
-                  fi
+                  
+                  # Clean up URL to get owner/repo
+                  # Remove https://github.com/
+                  TARGET_REPO=${TARGET_REPO#https://github.com/}
+                  # Remove .git suffix
+                  TARGET_REPO=${TARGET_REPO%.git}
+                  
+                  echo "Resolved target repo: $TARGET_REPO"
                   echo "repo=$TARGET_REPO" >> $GITHUB_OUTPUT
 
             - name: Checkout target repository
