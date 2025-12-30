@@ -23,7 +23,7 @@ on:
             target_repo:
                 description: "Target repository URL (e.g., https://github.com/owner/repo.git)"
                 required: false
-                default: ""
+                default: "https://github.com/Orcapt/orca-ui-npm.git"
             target_branch:
                 description: "Target branch name"
                 required: false
