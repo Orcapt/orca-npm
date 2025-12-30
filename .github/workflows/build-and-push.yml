@@ -3,13 +3,11 @@
 # This workflow builds the project and pushes the build artifacts to another repository.
 #
 # Required Secrets:
-#   - TARGET_REPO: Target repository in format "owner/repo" (e.g., "myorg/my-repo")
-#                  or full URL (e.g., "https://github.com/myorg/my-repo.git")
-#   - TARGET_REPO_TOKEN: Personal Access Token (PAT) or GitHub App token with write access to target repo
+#   - TARGET_REPO_TOKEN: Personal Access Token (PAT) with write access to target repo
 #
 # Usage:
 #   - Automatic: Runs on push to main/master branches
-#   - Manual: Use workflow_dispatch to trigger manually with optional inputs
+#   - Manual: Use workflow_dispatch to trigger manually
 
 name: Build and Push to Target Repo
 
@@ -19,18 +17,10 @@ on:
             - main
             - master
     workflow_dispatch:
-        inputs:
-            target_repo:
-                description: "Target repository URL (e.g., https://github.com/owner/repo.git)"
-                required: false
-                default: "https://github.com/Orcapt/orca-ui-npm.git"
-            target_branch:
-                description: "Target branch name"
-                required: false
-                default: "main"
 
 env:
     NODE_VERSION: "18"
+    TARGET_REPO: "Orcapt/orca-ui-npm"
 
 jobs:
     build-and-push:
@@ -39,8 +29,6 @@ jobs:
         steps:
             - name: Checkout source repository
               uses: actions/checkout@v4
-              with:
-                  fetch-depth: 0
 
             - name: Setup Node.js
               uses: actions/setup-node@v4
@@ -54,64 +42,39 @@ jobs:
             - name: Build project
               run: npm run build
 
-            - name: Get build artifacts
-              id: artifacts
+            - name: Configure Git
               run: |
-                  echo "files=$(find . -name '*.d.ts' -o -name '*.d.ts.map' | grep -v node_modules | tr '\n' ' ')" >> $GITHUB_OUTPUT
-                  echo "artifacts<<EOF" >> $GITHUB_OUTPUT
-                  find . -name '*.d.ts' -o -name '*.d.ts.map' | grep -v node_modules >> $GITHUB_OUTPUT
-                  echo "EOF" >> $GITHUB_OUTPUT
+                  git config --global user.name "github-actions[bot]"
+                  git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-            - name: Set target repository
-              id: set-target
+            - name: Clone target repository
               run: |
-                  # Get initial value
-                  RAW_REPO="${{ secrets.TARGET_REPO || github.event.inputs.target_repo }}"
-                  
-                  # Fallback to default if empty
-                  if [[ -z "$RAW_REPO" ]]; then
-                    RAW_REPO="Orcapt/orca-ui-npm"
-                  fi
-                  
-                  # Clean up URL to get owner/repo
-                  # parsing handles: https://github.com/, http://, git@github.com:, and .git suffix
-                  CLEAN_REPO=$(echo "$RAW_REPO" | sed -E 's|^(https?://)?(www\.)?github\.com/||' | sed -E 's|^git@github\.com:||' | sed 's|\.git$||' | xargs)
-                  
-                  echo "Resolved target repo: $CLEAN_REPO"
-                  echo "repo=$CLEAN_REPO" >> $GITHUB_OUTPUT
-
-            - name: Checkout target repository
-              uses: actions/checkout@v4
-              with:
-                  repository: ${{ steps.set-target.outputs.repo }}
-                  token: ${{ secrets.TARGET_REPO_TOKEN }}
-                  path: target-repo
-                  ref: ${{ github.event.inputs.target_branch || 'main' }}
+                  git clone https://${{ secrets.TARGET_REPO_TOKEN }}@github.com/${{ env.TARGET_REPO }}.git target-repo
+              env:
+                  TARGET_REPO_TOKEN: ${{ secrets.TARGET_REPO_TOKEN }}
 
             - name: Copy build artifacts to target repo
               run: |
-                  # Create directories if they don't exist
-                  mkdir -p target-repo/dist
-
                   # Copy all .d.ts and .d.ts.map files
                   find . -name '*.d.ts' -not -path './node_modules/*' -not -path './target-repo/*' -exec cp --parents {} target-repo/ \;
                   find . -name '*.d.ts.map' -not -path './node_modules/*' -not -path './target-repo/*' -exec cp --parents {} target-repo/ \;
 
-                  # Also copy source files if needed
+                  # Copy source files
                   cp -r src target-repo/ || true
                   cp package.json target-repo/ || true
                   cp README.md target-repo/ || true
                   cp LICENSE target-repo/ || true
 
-            - name: Configure Git
-              run: |
-                  cd target-repo
-                  git config user.name "github-actions[bot]"
-                  git config user.email "github-actions[bot]@users.noreply.github.com"
-
             - name: Commit and push to target repository
               run: |
                   cd target-repo
                   git add .
-                  git diff --staged --quiet || git commit -m "chore: update build artifacts from ${{ github.repository }}@${{ github.sha }}"
-                  git push origin ${{ github.event.inputs.target_branch || 'main' }}
+                  
+                  if git diff --staged --quiet; then
+                    echo "No changes to commit"
+                  else
+                    git commit -m "chore: update build artifacts from ${{ github.repository }}@${{ github.sha }}"
+                    git push https://${{ secrets.TARGET_REPO_TOKEN }}@github.com/${{ env.TARGET_REPO }}.git main
+                  fi
+              env:
+                  TARGET_REPO_TOKEN: ${{ secrets.TARGET_REPO_TOKEN }}
