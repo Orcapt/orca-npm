@@ -65,20 +65,20 @@ jobs:
             - name: Set target repository
               id: set-target
               run: |
-                  TARGET_REPO="${{ secrets.TARGET_REPO || github.event.inputs.target_repo }}"
+                  # Get initial value
+                  RAW_REPO="${{ secrets.TARGET_REPO || github.event.inputs.target_repo }}"
+                  
                   # Fallback to default if empty
-                  if [[ -z "$TARGET_REPO" ]]; then
-                    TARGET_REPO="Orcapt/orca-ui-npm"
+                  if [[ -z "$RAW_REPO" ]]; then
+                    RAW_REPO="Orcapt/orca-ui-npm"
                   fi
                   
                   # Clean up URL to get owner/repo
-                  # Remove https://github.com/
-                  TARGET_REPO=${TARGET_REPO#https://github.com/}
-                  # Remove .git suffix
-                  TARGET_REPO=${TARGET_REPO%.git}
+                  # parsing handles: https://github.com/, http://, git@github.com:, and .git suffix
+                  CLEAN_REPO=$(echo "$RAW_REPO" | sed -E 's|^(https?://)?(www\.)?github\.com/||' | sed -E 's|^git@github\.com:||' | sed 's|\.git$||' | xargs)
                   
-                  echo "Resolved target repo: $TARGET_REPO"
-                  echo "repo=$TARGET_REPO" >> $GITHUB_OUTPUT
+                  echo "Resolved target repo: $CLEAN_REPO"
+                  echo "repo=$CLEAN_REPO" >> $GITHUB_OUTPUT
 
             - name: Checkout target repository
               uses: actions/checkout@v4
