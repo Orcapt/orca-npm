@@ -1,23 +1,23 @@
-# Quick Start Guide - @orca/sdk
+# Quick Start Guide - @orcapt/sdk
 
 Get started with the Orca SDK in minutes!
 
 ## Installation
 
 ```bash
-npm install @orca/sdk
+npm install @orcapt/sdk
 ```
 
 For Express integration:
 
 ```bash
-npm install @orca/sdk express
+npm install @orcapt/sdk express
 ```
 
 ## Basic Example
 
 ```javascript
-const { OrcaHandler } = require('@orca/sdk');
+const { OrcaHandler } = require('@orcapt/sdk');
 
 // Initialize handler
 const orca = new OrcaHandler();
@@ -39,7 +39,7 @@ async function handleMessage(data) {
 ## With Express
 
 ```javascript
-const { createOrcaApp, addStandardEndpoints, OrcaHandler } = require('@orca/sdk');
+const { createOrcaApp, addStandardEndpoints, OrcaHandler } = require('@orcapt/sdk');
 
 // Create app
 const app = createOrcaApp({ title: 'My AI Agent' });
@@ -64,7 +64,7 @@ app.listen(8000, () => console.log('Server running on port 8000'));
 ## Using Variables & Memory
 
 ```javascript
-const { Variables, MemoryHelper } = require('@orca/sdk');
+const { Variables, MemoryHelper } = require('@orcapt/sdk');
 
 async function processMessage(data) {
   // Access environment variables

@@ -4,7 +4,7 @@
 
 ### Decision
 
-**@orca/sdk** starts at version **1.0.0** for its first npm release.
+**@orcapt/sdk** starts at version **1.0.0** for its first npm release.
 
 ### Reasoning
 
@@ -15,7 +15,7 @@
 2. **Independent Package**: While based on the Python `orca` package:
    - Different language (JavaScript vs Python)
    - Different ecosystem (npm vs PyPI)
-   - Different package name (`@orca/sdk` vs `orca`)
+   - Different package name (`@orcapt/sdk` vs `orca`)
    - Should have independent versioning
 
 3. **Python Package Context**:
@@ -33,7 +33,7 @@
 | Package                 | Version | Status                               |
 | ----------------------- | ------- | ------------------------------------ |
 | Python: `orca`          | 1.2.5   | Multiple releases, evolved over time |
-| JavaScript: `@orca/sdk` | 1.0.0   | First release, production-ready      |
+| JavaScript: `@orcapt/sdk` | 1.0.0   | First release, production-ready      |
 | **Feature Parity**      | ✅ 100% | Both have identical functionality    |
 
 ### Future Versioning
@@ -49,7 +49,7 @@ The npm package will version independently:
 
 In documentation, we clarify:
 
-- ✅ "First release of @orca/sdk"
+- ✅ "First release of @orcapt/sdk"
 - ✅ "Version 1.0.0 - production ready"
 - ✅ "Feature parity with orca (Python) v1.2.5"
 - ✅ Version numbers differ due to independent release cycles

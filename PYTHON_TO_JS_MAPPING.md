@@ -1,10 +1,10 @@
 # Python to JavaScript Mapping
 
-This document shows the equivalence between the Python (`orca-pip`) and JavaScript (`@orca/sdk`) implementations.
+This document shows the equivalence between the Python (`orca-pip`) and JavaScript (`@orcapt/sdk`) implementations.
 
 ## Package Structure
 
-| Python (orca-pip)           | JavaScript (@orca/sdk)         |
+| Python (orca-pip)           | JavaScript (@orcapt/sdk)         |
 | --------------------------- | ------------------------------ |
 | `orca/__init__.py`          | `src/index.js`                 |
 | `orca/models.py`            | `src/models.js`                |
@@ -36,7 +36,7 @@ memory = Memory(name="John", goals=["AI"])
 **JavaScript:**
 
 ```javascript
-const { ChatMessage, ChatResponse, Variable, Memory } = require('@orca/sdk');
+const { ChatMessage, ChatResponse, Variable, Memory } = require('@orcapt/sdk');
 
 const message = new ChatMessage(data);
 const response = new ChatResponse('success', 'Processing', uuid, threadId);
@@ -60,7 +60,7 @@ orca.send_error(data, error_message)
 **JavaScript:**
 
 ```javascript
-const { OrcaHandler } = require('@orca/sdk');
+const { OrcaHandler } = require('@orcapt/sdk');
 
 const orca = new OrcaHandler(true);
 await orca.streamChunk(data, content);
@@ -85,7 +85,7 @@ vars_dict = vars.to_dict()
 **JavaScript:**
 
 ```javascript
-const { Variables } = require('@orca/sdk');
+const { Variables } = require('@orcapt/sdk');
 
 const vars = new Variables(data.variables);
 const apiKey = vars.get('OPENAI_API_KEY');
@@ -113,7 +113,7 @@ memory_dict = memory.to_dict()
 **JavaScript:**
 
 ```javascript
-const { MemoryHelper } = require('@orca/sdk');
+const { MemoryHelper } = require('@orcapt/sdk');
 
 const memory = new MemoryHelper(data.memory);
 const name = memory.getName();
@@ -152,7 +152,7 @@ add_standard_endpoints(
 
 ```javascript
 const express = require('express');
-const { createOrcaApp, addStandardEndpoints, OrcaHandler } = require('@orca/sdk');
+const { createOrcaApp, addStandardEndpoints, OrcaHandler } = require('@orcapt/sdk');
 
 const app = createOrcaApp({ title: 'My AI Agent' });
 const orca = new OrcaHandler();
@@ -232,8 +232,8 @@ pip install orca[web]  # With FastAPI
 **JavaScript:**
 
 ```bash
-npm install @orca/sdk
-npm install @orca/sdk express  # With Express
+npm install @orcapt/sdk
+npm install @orcapt/sdk express  # With Express
 ```
 
 ## Environment Variables
@@ -303,6 +303,6 @@ npm publish --access public
 
 ## Version Compatibility
 
-- Python: `orca` v1.2.5
-- JavaScript: `@orca/sdk` v1.2.5
+- Python: `orcapt-sdk` v1.0.5
+- JavaScript: `@orcapt/sdk` v1.0.0
 - Both versions have identical API and features

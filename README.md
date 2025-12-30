@@ -7,13 +7,13 @@ A clean, minimal Node.js package for seamless integration with the Orca platform
 ### Install from npm (Recommended)
 
 ```bash
-npm install @orca/sdk
+npm install @orcapt/sdk
 ```
 
 ### Install with Express dependencies
 
 ```bash
-npm install @orca/sdk express
+npm install @orcapt/sdk express
 ```
 
 ### Install from source
@@ -27,7 +27,7 @@ npm link
 
 ## 📦 Package Information
 
-- **Package Name**: `@orca/sdk`
+- **Package Name**: `@orcapt/sdk`
 - **Version**: 1.0.0
 - **Node**: >=14.0.0
 - **License**: MIT
@@ -56,7 +56,7 @@ This package provides a clean interface for AI agents to communicate with the Or
 ## 📁 Package Structure
 
 ```
-@orca/sdk/
+@orcapt/sdk/
 ├── src/
 │   ├── index.js               # Package exports with optional web imports
 │   ├── models.js              # Orca data models (ChatMessage, ChatResponse, Variable)
@@ -82,7 +82,7 @@ This package provides a clean interface for AI agents to communicate with the Or
 ### Basic Usage
 
 ```javascript
-const { OrcaHandler, ChatMessage } = require('@orca/sdk');
+const { OrcaHandler, ChatMessage } = require('@orcapt/sdk');
 
 // Initialize the handler
 const orca = new OrcaHandler();
@@ -99,7 +99,7 @@ async function processMessage(data) {
 
 ```javascript
 const express = require('express');
-const { createOrcaApp, addStandardEndpoints, OrcaHandler } = require('@orca/sdk');
+const { createOrcaApp, addStandardEndpoints, OrcaHandler } = require('@orcapt/sdk');
 
 // Create Express app
 const app = createOrcaApp({
@@ -129,7 +129,7 @@ app.listen(8000, () => {
 Single, clean interface for all Orca communication:
 
 ```javascript
-const { OrcaHandler } = require('@orca/sdk');
+const { OrcaHandler } = require('@orcapt/sdk');
 
 // Initialize with optional dev mode
 const orca = new OrcaHandler(); // Auto-detects from ORCA_DEV_MODE env var
@@ -159,7 +159,7 @@ orca.updateCentrifugoConfig(streamUrl, streamToken);
 Orca's expected data formats:
 
 ```javascript
-const { ChatMessage, ChatResponse, Variable, Memory } = require('@orca/sdk');
+const { ChatMessage, ChatResponse, Variable, Memory } = require('@orcapt/sdk');
 
 // ChatMessage - Orca's request format with all required fields
 // ChatResponse - Orca's expected response format
@@ -172,7 +172,7 @@ const { ChatMessage, ChatResponse, Variable, Memory } = require('@orca/sdk');
 Easy access to environment variables from Orca requests:
 
 ```javascript
-const { Variables } = require('@orca/sdk');
+const { Variables } = require('@orcapt/sdk');
 
 // Create variables helper from request data
 const vars = new Variables(data.variables);
@@ -199,7 +199,7 @@ const varsDict = vars.toDict(); // {"OPENAI_API_KEY": "sk-...", ...}
 Easy access to user memory data from Orca requests:
 
 ```javascript
-const { MemoryHelper } = require('@orca/sdk');
+const { MemoryHelper } = require('@orcapt/sdk');
 
 // Create memory helper from request data
 const memory = new MemoryHelper(data.memory);
@@ -244,8 +244,8 @@ if (!memory.isEmpty()) {
 Create Orca-compatible responses:
 
 ```javascript
-const { createSuccessResponse } = require('@orca/sdk');
-const { createCompleteResponse } = require('@orca/sdk/src/response-handler');
+const { createSuccessResponse } = require('@orcapt/sdk');
+const { createCompleteResponse } = require('@orcapt/sdk/src/response-handler');
 
 // Create immediate success response
 const response = createSuccessResponse('uuid123', 'thread456');
@@ -267,7 +267,7 @@ const {
   MemoryHelper,
   createOrcaApp,
   addStandardEndpoints
-} = require('@orca/sdk');
+} = require('@orcapt/sdk');
 
 // Initialize services
 const orca = new OrcaHandler();
@@ -356,7 +356,7 @@ Your AI agent focuses on AI logic, this package handles all Orca communication c
 ## 🧪 Testing
 
 ```javascript
-const { OrcaHandler } = require('@orca/sdk');
+const { OrcaHandler } = require('@orcapt/sdk');
 
 // Test basic functionality
 const handler = new OrcaHandler();
@@ -387,10 +387,10 @@ console.assert(typeof handler.updateCentrifugoConfig === 'function');
 ### Import Error
 
 ```
-Error: Cannot find module '@orca/sdk'
+Error: Cannot find module '@orcapt/sdk'
 ```
 
-**Solution**: Ensure the package is installed: `npm install @orca/sdk`
+**Solution**: Ensure the package is installed: `npm install @orcapt/sdk`
 
 ### Missing Dependencies
 
@@ -442,7 +442,7 @@ npm publish --access public
 
 ## 📞 Support
 
-This package is designed to be a drop-in solution - just `npm install @orca/sdk` and start building your AI agent! All Orca communication is handled automatically, standard endpoints are provided out-of-the-box, and your AI agent remains completely platform-agnostic.
+This package is designed to be a drop-in solution - just `npm install @orcapt/sdk` and start building your AI agent! All Orca communication is handled automatically, standard endpoints are provided out-of-the-box, and your AI agent remains completely platform-agnostic.
 
 ## 📄 License
 
@@ -459,5 +459,5 @@ For more detailed documentation, please refer to the inline code comments and ex
 ## 🔗 Links
 
 - [GitHub Repository](https://github.com/orcapt/orca-npm)
-- [npm Package](https://www.npmjs.com/package/@orca/sdk)
+- [npm Package](https://www.npmjs.com/package/@orcapt/sdk)
 - [Issue Tracker](https://github.com/orcapt/orca-npm/issues)

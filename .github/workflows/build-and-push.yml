@@ -1,0 +1,113 @@
+# GitHub Actions Workflow: Build and Push to Target Repository
+#
+# This workflow builds the project and pushes the build artifacts to another repository.
+#
+# Required Secrets:
+#   - TARGET_REPO: Target repository in format "owner/repo" (e.g., "myorg/my-repo")
+#                  or full URL (e.g., "https://github.com/myorg/my-repo.git")
+#   - TARGET_REPO_TOKEN: Personal Access Token (PAT) or GitHub App token with write access to target repo
+#
+# Usage:
+#   - Automatic: Runs on push to main/master branches
+#   - Manual: Use workflow_dispatch to trigger manually with optional inputs
+
+name: Build and Push to Target Repo
+
+on:
+    push:
+        branches:
+            - main
+            - master
+    workflow_dispatch:
+        inputs:
+            target_repo:
+                description: "Target repository URL (e.g., https://github.com/owner/repo.git)"
+                required: false
+                default: ""
+            target_branch:
+                description: "Target branch name"
+                required: false
+                default: "main"
+
+env:
+    NODE_VERSION: "18"
+
+jobs:
+    build-and-push:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout source repository
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+                  cache: "npm"
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Build project
+              run: npm run build
+
+            - name: Get build artifacts
+              id: artifacts
+              run: |
+                  echo "files=$(find . -name '*.d.ts' -o -name '*.d.ts.map' | grep -v node_modules | tr '\n' ' ')" >> $GITHUB_OUTPUT
+                  echo "artifacts<<EOF" >> $GITHUB_OUTPUT
+                  find . -name '*.d.ts' -o -name '*.d.ts.map' | grep -v node_modules >> $GITHUB_OUTPUT
+                  echo "EOF" >> $GITHUB_OUTPUT
+
+            - name: Set target repository
+              id: set-target
+              run: |
+                  TARGET_REPO="${{ secrets.TARGET_REPO || github.event.inputs.target_repo }}"
+                  if [[ -z "$TARGET_REPO" ]]; then
+                    echo "Error: TARGET_REPO secret or input is required"
+                    exit 1
+                  fi
+                  # Convert URL to owner/repo format if needed
+                  if [[ "$TARGET_REPO" == https://github.com/* ]]; then
+                    TARGET_REPO=$(echo "$TARGET_REPO" | sed 's|https://github.com/||' | sed 's|\.git$||')
+                  fi
+                  echo "repo=$TARGET_REPO" >> $GITHUB_OUTPUT
+
+            - name: Checkout target repository
+              uses: actions/checkout@v4
+              with:
+                  repository: ${{ steps.set-target.outputs.repo }}
+                  token: ${{ secrets.TARGET_REPO_TOKEN }}
+                  path: target-repo
+                  ref: ${{ github.event.inputs.target_branch || 'main' }}
+
+            - name: Copy build artifacts to target repo
+              run: |
+                  # Create directories if they don't exist
+                  mkdir -p target-repo/dist
+
+                  # Copy all .d.ts and .d.ts.map files
+                  find . -name '*.d.ts' -not -path './node_modules/*' -not -path './target-repo/*' -exec cp --parents {} target-repo/ \;
+                  find . -name '*.d.ts.map' -not -path './node_modules/*' -not -path './target-repo/*' -exec cp --parents {} target-repo/ \;
+
+                  # Also copy source files if needed
+                  cp -r src target-repo/ || true
+                  cp package.json target-repo/ || true
+                  cp README.md target-repo/ || true
+                  cp LICENSE target-repo/ || true
+
+            - name: Configure Git
+              run: |
+                  cd target-repo
+                  git config user.name "github-actions[bot]"
+                  git config user.email "github-actions[bot]@users.noreply.github.com"
+
+            - name: Commit and push to target repository
+              run: |
+                  cd target-repo
+                  git add .
+                  git diff --staged --quiet || git commit -m "chore: update build artifacts from ${{ github.repository }}@${{ github.sha }}"
+                  git push origin ${{ github.event.inputs.target_branch || 'main' }}

@@ -1,10 +1,10 @@
 # Version 1.0.0 Release Notes
 
-## @orca/sdk v1.0.0 - Initial Release
+## @orcapt/sdk v1.0.0 - Initial Release
 
 **Release Date:** October 12, 2024
 
-This is the **first release** of the @orca/sdk npm package, providing a complete JavaScript/Node.js implementation of the Orca platform integration SDK.
+This is the **first release** of the @orcapt/sdk npm package, providing a complete JavaScript/Node.js implementation of the Orca platform integration SDK.
 
 **Note:** This is version 1.0.0 as it's the first npm release. The equivalent Python package (orca) is at version 1.2.5, but we start fresh for the npm package.
 
@@ -56,19 +56,19 @@ This is the **first release** of the @orca/sdk npm package, providing a complete
 ### 📦 Installation
 
 ```bash
-npm install @orca/sdk
+npm install @orcapt/sdk
 ```
 
 With Express:
 
 ```bash
-npm install @orca/sdk express
+npm install @orcapt/sdk express
 ```
 
 ### 🚀 Quick Start
 
 ```javascript
-const { OrcaHandler } = require('@orca/sdk');
+const { OrcaHandler } = require('@orcapt/sdk');
 
 const orca = new OrcaHandler();
 
@@ -132,7 +132,7 @@ This package is a JavaScript port of the Python `orca` package, maintaining API 
 
 - GitHub Issues: https://github.com/orcapt/orca-npm/issues
 - Documentation: https://github.com/orcapt/orca-npm#readme
-- npm: https://www.npmjs.com/package/@orca/sdk
+- npm: https://www.npmjs.com/package/@orcapt/sdk
 
 ### 📄 License
 

@@ -1,6 +1,6 @@
 {
-  "name": "@orca/sdk",
-  "version": "1.0.3",
+  "name": "@orcapt/sdk",
+  "version": "1.0.0",
   "description": "Clean, minimal package for Orca platform integration",
   "main": "src/index.js",
   "types": "src/index.d.ts",
@@ -21,7 +21,7 @@
     "express",
     "real-time"
   ],
-  "author": "Orca Team <support@orcaplatform.com>",
+  "author": "Orca Team <support@orcaplatform.ai>",
   "license": "MIT",
   "repository": {
     "type": "git",
